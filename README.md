@@ -70,13 +70,3 @@ curl -X DELETE http://localhost:3000/users/<USER_ID>
 ```
 
 ---
-
-## Design Decisions & Limitations
-
-- **SOLID Principles & Dependency Injection:** The implementation heavily isolates business logic from infrastructure implementation. We utilized an `IUserRepository` boundary interface. The `UsersService` strictly depends on this abstraction (DIP) rather than a direct Mongoose model, making the system modular and testable.
-- **Worker Cron Strategy:** The `BirthdaySchedulerWorker` fetches all users and executes checking logic *every hour* on the hour (`0 * * * *`). It checks if the current moment converted to the *user's local timezone* equates to 9 AM, and if the month/date match their birthday. 
-- **Message Simulation:** As requested, the "Happy Birthday" message is not integrated with external SMTPs right now; it simulates a send by logging directly to the NestJS Logger terminal output via the `NotificationService`.
-- **Database Indexing:** We defined the `email` property as `unique: true` on the Mongoose schema. The application service layer catches `11000` duplicate key errors and returns graceful `409 Conflict` exceptions.
-- **Assumptions**: 
-  - Valid IANA Timezones are required (validated globally using a custom decorator and `moment-timezone`).
-  - Leap years are handled generally by `moment.utc`. (e.g., Feb 29 birthdays evaluated natively).
