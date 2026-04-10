@@ -16,6 +16,9 @@ export class User {
 
   @Prop({ required: true })
   timezone: string;
+
+  @Prop({ default: null })
+  deleted_at: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

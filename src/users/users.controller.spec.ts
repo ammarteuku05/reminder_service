@@ -37,8 +37,8 @@ describe('UsersController', () => {
     expect(await controller.update('1', {} as any)).toEqual({ id: '1' });
   });
 
-  it('should remove user', async () => {
-    mockService.remove.mockResolvedValue({ id: '1' });
-    expect(await controller.remove('1')).toEqual({ id: '1' });
+  it('should soft delete user', async () => {
+    mockService.remove.mockResolvedValue({ id: '1', deleted_at: 1712750000 });
+    expect(await controller.remove('1')).toEqual({ id: '1', deleted_at: 1712750000 });
   });
 });

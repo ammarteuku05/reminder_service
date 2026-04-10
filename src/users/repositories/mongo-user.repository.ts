@@ -16,18 +16,22 @@ export class MongoUserRepository implements IUserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    return this.userModel.findById(id).exec();
+    return this.userModel.findOne({ _id: id, deleted_at: null }).exec();
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
+    return this.userModel.findOneAndUpdate({ _id: id, deleted_at: null }, updateUserDto, { new: true }).exec();
   }
 
   async delete(id: string): Promise<User | null> {
-    return this.userModel.findByIdAndDelete(id).exec();
+    return this.userModel.findOneAndUpdate(
+      { _id: id, deleted_at: null },
+      { deleted_at: Math.floor(Date.now() / 1000) },
+      { new: true },
+    ).exec();
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return this.userModel.find({ deleted_at: null }).exec();
   }
 }
