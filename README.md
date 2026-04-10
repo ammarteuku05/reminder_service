@@ -66,7 +66,7 @@ curl -X PATCH http://localhost:3000/users/<USER_ID> \
 
 ### 4. Delete a User
 ```bash
-curl -X DELETE http://localhost:3000/users/<USER_ID>
+curl -X PUT http://localhost:3000/users/<USER_ID>/delete
 ```
-
+   
 ---
